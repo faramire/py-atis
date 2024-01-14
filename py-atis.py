@@ -101,11 +101,11 @@ def CLDS(api):
         return [ttsstr_, normstr_]
 
 
-def createATIS(wxurl_, wxapikey_, owmAPIkey_, atislocation_, lat_, long_, letterc_=0):
+def createATIS(wxurl_, wxapikey_, owmAPIkey_, atislocation_, rwy_, lat_, long_, letterc_=0):
     """Create ATIS: gets all information needed and generates two ATIS strings: TTS ready [0] and readible [1]"""
 
-    owmATIS = OWM(owmAPIkey_) # initiate OWM API
-    mgrATIS = owmATIS.weather_manager()
+    owmATIS     = OWM(owmAPIkey_) # initiate OWM API
+    mgrATIS     = owmATIS.weather_manager()
 
     atistime    = ATIStime()
     ol          = mgrATIS.one_call(lat=lat_, lon=long_, exclude='minutely,hourly')
@@ -118,7 +118,7 @@ def createATIS(wxurl_, wxapikey_, owmAPIkey_, atislocation_, lat_, long_, letter
     temp        = round(ol.current.temp['temp'] - 273.15)
     dew         = round(ol.current.dewpoint - 273.15)
 
-    atisTTS     = ATISstring(atislocation_, letterc_, rp(atistime), '2 7', rp(tl), rp(windD), rp(windV), viscalc(vis), clouds[0], rp(temp), rp(dew), rp(QNH))
-    atisNORM    = ATISstring(atislocation_, letterc_, atistime, '27', tl, windD, windV, vis, clouds[1], temp, dew, QNH)
+    atisTTS     = ATISstring(atislocation_, letterc_, rp(atistime), rp(rwy_), rp(tl), rp(windD), rp(windV), viscalc(vis), clouds[0], rp(temp), rp(dew), rp(QNH))
+    atisNORM    = ATISstring(atislocation_, letterc_, atistime, rwy_, tl, windD, windV, vis, clouds[1], temp, dew, QNH)
 
     return [atisTTS, atisNORM]
