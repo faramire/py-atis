@@ -2,7 +2,7 @@
 A Python module to generate ATIS strings with Open Weather Map (OWM) and CheckWX (WX).
 
 **THIS IS NOT TO BE USED IN REAL AVIATION!**  
-ALWAYS USE OFFICIAL SOURCES FOR ACCURATE, UP TO DATE INFORMATION. CHECK YOUR LOCAL, UP TO DATE AIP FOR MORE INFORMATION.
+ALWAYS USE OFFICIAL SOURCES FOR ACCURATE, UP TO DATE INFORMATION. CHECK YOUR LOCAL, UP TO DATE AIP FOR WHERE TO FIND THOSE.
 
 I created this for a custom alarm that wakes me up in the morning with up to date weather information, but in the form of an ATIS. Hence it currently says "expect foot approach".
 
