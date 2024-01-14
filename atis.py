@@ -102,14 +102,14 @@ def CLDS(api):
         return [ttsstr_, normstr_]
 
 
-def createATIS(wxurl_, wxapikey_, owmAPIkey_, atislocation_, rwy_, expect_, lat_, long_, letterc_=0):
+def createATIS(wxurl_, wxapikey_, owmAPIkey_, atislocation_, rwy_, expect_, lat_, lon_, letterc_=0):
     """Create ATIS: gets all information needed and generates two ATIS strings: TTS ready [0] and readible [1]"""
 
     owmATIS     = OWM(owmAPIkey_) # initiate OWM API
     mgrATIS     = owmATIS.weather_manager()
 
     atistime    = ATIStime()
-    ol          = mgrATIS.one_call(lat=lat_, lon=long_, exclude='minutely,hourly')
+    ol          = mgrATIS.one_call(lat=lat_, lon=lon_, exclude='minutely,hourly')
     QNH         = ol.current.pressure['press']
     tl          = TL(QNH)
     windD       = ol.current.wnd['deg']
