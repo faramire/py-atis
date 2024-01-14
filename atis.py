@@ -3,13 +3,14 @@
 # ========================================
 # 
 # Py-ATIS module
+# github.com/faramire/py-atis/
 # (c) Fabio Ramirez Stern, 2023-2024
 # 
 # ========================================
 
 import time
-import re # regex
-import requests # http requests for WX API (real ATIS)
+import re # regex to query for clouds from the METAR
+import requests # http requests for WX API (real METAR)
 
 from pyowm import OWM # open weather map (OWM) API
 
@@ -20,11 +21,11 @@ def rp(input_):
     """Radio Pronunciation: converts numbers into single individual digits for reading out radio style"""
     return ' '.join(str(input_))
 
-def ATISstring(location, letterc_, atistime_, rwy_, TL_, windD_, windV_, vis_, clouds_, temp_, dew_, QNH_):
+def ATISstring(location, letterc_, atistime_, rwy_, expect_, TL_, windD_, windV_, vis_, clouds_, temp_, dew_, QNH_):
     """ATIS String: embeds all information into a ready string"""
 
     return f"""This is {location} information {ICAOal[letterc_]}, time {atistime_} Lima.
-Runway in use: {rwy_}, expect foot approach.
+Runway in use: {rwy_}, {expect_}.
 Wind {windD_} degrees, {windV_} knots.
 Visibility {vis_}.
 Clouds {clouds_}.
@@ -48,7 +49,7 @@ def TL(QNH_):
         return 50
 
 def viscalc(vis_):
-    """Visibility Calculation: rounds visibility and converts it into a radio ready string"""
+    """WIP! Visibility Calculation: rounds visibility and converts it into a radio ready string"""
     #if vis_ < 800:
     #    rtrn = vis_ if vis_ % 50 == 0 else vis_ + 50 - vis_ % 50 # rounds to 50
     if vis_ < 5000:
@@ -64,7 +65,7 @@ def viscalc(vis_):
         return f'{rtrn//1000} thousand {rtrn//100} hundred' # thousand + hundred
 
 def cloudsWX(wxurl_, wxapikey_):
-    """gets cloud heights from EDDF via WX API"""
+    """gets cloud heights from airport via WX API"""
 
     response = requests.request("GET", wxurl_, headers={'X-API-Key': wxapikey_}).text
     if "CAVOK" in response:
@@ -101,7 +102,7 @@ def CLDS(api):
         return [ttsstr_, normstr_]
 
 
-def createATIS(wxurl_, wxapikey_, owmAPIkey_, atislocation_, rwy_, lat_, long_, letterc_=0):
+def createATIS(wxurl_, wxapikey_, owmAPIkey_, atislocation_, rwy_, expect_, lat_, long_, letterc_=0):
     """Create ATIS: gets all information needed and generates two ATIS strings: TTS ready [0] and readible [1]"""
 
     owmATIS     = OWM(owmAPIkey_) # initiate OWM API
@@ -118,7 +119,7 @@ def createATIS(wxurl_, wxapikey_, owmAPIkey_, atislocation_, rwy_, lat_, long_, 
     temp        = round(ol.current.temp['temp'] - 273.15)
     dew         = round(ol.current.dewpoint - 273.15)
 
-    atisTTS     = ATISstring(atislocation_, letterc_, rp(atistime), rp(rwy_), rp(tl), rp(windD), rp(windV), viscalc(vis), clouds[0], rp(temp), rp(dew), rp(QNH))
-    atisNORM    = ATISstring(atislocation_, letterc_, atistime, rwy_, tl, windD, windV, vis, clouds[1], temp, dew, QNH)
+    atisTTS     = ATISstring(atislocation_, letterc_, rp(atistime), rp(rwy_), expect_, rp(tl), rp(windD), rp(windV), viscalc(vis), clouds[0], rp(temp), rp(dew), rp(QNH))
+    atisNORM    = ATISstring(atislocation_, letterc_, atistime, rwy_, expect_, tl, windD, windV, vis, clouds[1], temp, dew, QNH)
 
     return [atisTTS, atisNORM]
