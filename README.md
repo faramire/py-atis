@@ -1,4 +1,6 @@
 # Py-ATIS
+![GitHub License](https://img.shields.io/github/license/faramire/py-atis)
+
 A Python module to generate ATIS strings with Open Weather Map (OWM) and CheckWX (WX).
 
 **THIS IS NOT TO BE USED IN REAL AVIATION!**  
