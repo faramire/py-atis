@@ -17,11 +17,11 @@ from pyowm import OWM # open weather map (OWM) API
 ICAOal = ['Alpha', 'Bravo', 'Charlie', 'Delta', 'Echo', 'Foxtrot', 'Golf', 'Hotel', 'India', 'Juliet', 'Kilo', 'Lima', 'Mike', 'November', 'Oscar', 'Papa', 'Quebec', 'Romeo',
         'Sierra', 'Tango', 'Uniform', 'Victor', 'Whiskey', 'X-Ray', 'Yankee', 'Zulu']
 
-def rp(input_):
+def rp(input_) -> str:
     """Radio Pronunciation: converts numbers into single individual digits for reading out radio style"""
     return ' '.join(str(input_))
 
-def ATISstring(location, letterc_, atistime_, rwy_, expect_, TL_, windD_, windV_, vis_, clouds_, temp_, dew_, QNH_):
+def ATISstring(location, letterc_, atistime_, rwy_, expect_, TL_, windD_, windV_, vis_, clouds_, temp_, dew_, QNH_) -> str:
     """ATIS String: embeds all information into a ready string"""
 
     return f"""This is {location} information {ICAOal[letterc_]}, time {atistime_} Lima.
@@ -33,11 +33,11 @@ Temperature {temp_}, Dewpoint {dew_}.
 QNH {QNH_} hectopascal, transition level {TL_}.
 Information {ICAOal[letterc_]} out."""
 
-def ATIStime():
+def ATIStime() -> str:
     """ATIS Time: gets the local time for the ATIS"""
     return time.strftime('%H%M')
 
-def TL(QNH_):
+def TL(QNH_:int):
     """Transition Level: calculates the transition level based off the QNH"""
     if QNH_ <= 977:
         return 80
@@ -48,7 +48,7 @@ def TL(QNH_):
     else:
         return 50
 
-def viscalc(vis_):
+def viscalc(vis_:int):
     """WIP! Visibility Calculation: rounds visibility and converts it into a radio ready string"""
     #if vis_ < 800:
     #    rtrn = vis_ if vis_ % 50 == 0 else vis_ + 50 - vis_ % 50 # rounds to 50
@@ -64,7 +64,7 @@ def viscalc(vis_):
     else:
         return f'{rtrn//1000} thousand {rtrn//100} hundred' # thousand + hundred
 
-def cloudsWX(wxurl_, wxapikey_):
+def cloudsWX(wxurl_:str, wxapikey_:str):
     """gets cloud heights from airport via WX API"""
 
     response = requests.request("GET", wxurl_, headers={'X-API-Key': wxapikey_}).text
@@ -75,18 +75,18 @@ def cloudsWX(wxurl_, wxapikey_):
         out_.insert(0, len(out_)) # undoes one layer of "array within array" (I think)
         return(out_)
     
-def CLDS(api):
-    """decodes the cloud heights from the API"""
+def CLDS(api_:str) -> list[str]:
+    """decodes the cloud heights from the CheckWX API"""
 
-    if api[0] == 0: # code indicating CAVOK
+    if api_[0] == 0: # code indicating CAVOK
         return ['CAV OK', 'CAVOK']
     else:
-        len_= len(api) # how many cloud layers are in the array?
+        len_= len(api_) # how many cloud layers are in the array?
         ttsstr_ = '' # text to speech string
-        normstr_ = ' '.join(api[1:len_]) # readable string
+        normstr_ = ' '.join(api_[1:len_]) # readable string
         for i in range(1, len_): # do for as many cloud layers there are
-            cov_ = str(api[i])[:3] # the first three letters are the coverage amount
-            alt_ = rp(str(api[i][4:])) # from char 4 on are the heights
+            cov_ = str(api_[i])[:3] # the first three letters are the coverage amount
+            alt_ = rp(str(api_[i][4:])) # from char 4 on are the heights
             match cov_:
                 case 'SCT':
                     add = 'Scattered'
@@ -102,7 +102,7 @@ def CLDS(api):
         return [ttsstr_, normstr_]
 
 
-def createATIS(wxurl_, wxapikey_, owmAPIkey_, atislocation_, rwy_, expect_, lat_, lon_, letterc_=0):
+def createATIS(wxurl_: str, wxapikey_: str, owmAPIkey_: str, atislocation_: str, rwy_: str, expect_: str, lat_: int, lon_: int, letterc_: int=0) -> list[str]:
     """Create ATIS: gets all information needed and generates two ATIS strings: TTS ready [0] and readible [1]"""
 
     owmATIS     = OWM(owmAPIkey_) # initiate OWM API
