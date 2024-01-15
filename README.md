@@ -42,3 +42,12 @@ Temperature -2, Dewpoint -4.
 QNH 1006 hectopascal, transition level 70.
 Information Alpha out.
 ```
+## Limitations/To Be Added
+
+The following features are not currently supported but should be added somewhen if I don't forget to do so.
+
+- support for runway indicators with directional components (ie 25L, 25C, 25R)
+- automatically getting lat and lon of a chosen airport
+- automatically getting nearest airport of a chosen lat and lon
+- more advanced messages for insertion into the atis
+- a cleaner input interface (perhaps by creating an object) 
