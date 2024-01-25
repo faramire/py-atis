@@ -4,12 +4,12 @@
 A Python module to generate ATIS strings with Open Weather Map (OWM) and CheckWX (WX).
 
 **THIS IS NOT TO BE USED IN REAL AVIATION!**  
-ALWAYS USE OFFICIAL SOURCES FOR ACCURATE, UP TO DATE INFORMATION. CHECK YOUR LOCAL, CURRENT AIP FOR WHERE TO FIND THOSE.
+ALWAYS USE OFFICIAL SOURCES FOR ACCURATE, UP TO DATE INFORMATION. CHECK YOUR LOCAL, CURRENT AIP ON WHERE TO FIND THOSE.
 
 I created this for a custom alarm that wakes me up in the morning with up to date weather information, but in the form of an ATIS. Hence it currently says "expect foot approach".
 
 The current version generates a European/German style ATIS, following ICAO and local standards, as well as trying to mimic the ATIS of Frankfurt Main Airport (EDDF).
-Further it uses metric wherever possible, ie. kilometers for visibility, hectopascals for QNH and degrees celsius for OAT/dewpoint.
+It uses metric units wherever possible, ie. kilometers for visibility, hectopascals for QNH and degrees celsius for OAT/dewpoint.
 Metric rules, but if I'm really bored, I might add an US style string.
 
 ## Dependencies
